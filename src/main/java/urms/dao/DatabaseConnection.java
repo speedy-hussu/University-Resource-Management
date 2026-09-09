@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.stream.Collectors;
@@ -16,6 +18,24 @@ import java.util.stream.Collectors;
  * SQLite Database Connection and Schema Initialization Manager.
  */
 public class DatabaseConnection {
+
+    public static String authenticate(String username, String password) throws SQLException {
+        String sql = "SELECT full_name, password_hash FROM Users "
+                + "WHERE username = ? AND is_active = 1";
+
+        try (Connection conn = getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, username);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()
+                        && org.mindrot.jbcrypt.BCrypt.checkpw(password, resultSet.getString("password_hash"))) {
+                    return resultSet.getString("full_name");
+                }
+            }
+        }
+        return null;
+    }
 
     /**
      * Obtains a connection to the SQLite database.

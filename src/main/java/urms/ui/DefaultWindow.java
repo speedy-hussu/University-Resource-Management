@@ -8,7 +8,7 @@ import java.awt.*;
  */
 public class DefaultWindow {
 
-    public static void showWindow() {
+    public static void showWindow(String fullName) {
         JFrame frame = new JFrame("University Resource Management System");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 300);
@@ -24,7 +24,7 @@ public class DefaultWindow {
         header.add(title);
 
         // Center Content
-        JLabel label = new JLabel("System & Database Ready!", SwingConstants.CENTER);
+        JLabel label = new JLabel("Welcome, " + fullName + "", SwingConstants.CENTER);
         label.setFont(new Font("SansSerif", Font.BOLD, 18));
 
         frame.setLayout(new BorderLayout());

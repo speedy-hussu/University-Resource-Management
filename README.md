@@ -65,6 +65,7 @@ The SQLite schema (`src/main/resources/db/schema.sql`) defines four core tables:
 * **Database:** SQLite (`org.xerial:sqlite-jdbc`)
 * **UI & Theming:** Java Swing (System Look and Feel)
 * **Security:** jBCrypt (`org.mindrot:jbcrypt`)
+* **Authentication:** BCrypt operator login backed by the `Users` table
 * **Testing:** JUnit 5 (`org.junit.jupiter:junit-jupiter`)
 * **Build Tool:** Maven
 
@@ -76,6 +77,15 @@ The SQLite schema (`src/main/resources/db/schema.sql`) defines four core tables:
 ```powershell
 mvn compile exec:java
 ```
+
+The application opens with an operator sign-in screen. The seeded demo account is:
+
+```text
+Username: admin
+Password: admin123
+```
+
+Only active users from the `Users` table can sign in. Passwords are verified using BCrypt.
 
 ### Build a standalone runnable JAR:
 ```powershell

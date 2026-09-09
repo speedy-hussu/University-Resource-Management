@@ -4,7 +4,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import urms.dao.DatabaseConnection;
-import urms.ui.DefaultWindow;
+import urms.ui.LoginWindow;
 
 /**
  * Application Entry Point (Orchestrator).
@@ -24,10 +24,10 @@ public class Main {
         System.out.println("Starting application & initializing database...");
         DatabaseConnection.initializeDatabase();
 
-        // 3. Launch UI Window on Event Dispatch Thread (EDT)
+        // 3. Launch login UI on the Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> {
-            DefaultWindow.showWindow();
-            System.out.println("Application UI launched successfully.");
+            LoginWindow.showWindow();
+            System.out.println("Login UI launched successfully.");
         });
     }
 }

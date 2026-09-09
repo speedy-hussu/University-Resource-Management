@@ -3,8 +3,13 @@
 -- ==========================================================
 
 -- 0. Default Operator: admin / admin123 (BCrypt hash)
+UPDATE Users
+SET password_hash = '$2a$10$aozGpvZJR1r2rtYybOSdTOwULNTtkPikSqMmRu6Wez16BSF/B3KaS'
+WHERE username = 'admin'
+	AND password_hash = '$2a$10$wN2a3R2V6X0l6pT3N2Y8u.C5tqF5b9vR4M8t9V3z5x1y7q2w3e4r';
+
 INSERT OR IGNORE INTO Users (user_id, username, password_hash, full_name, is_active) VALUES
-(1, 'admin', '$2a$10$wN2a3R2V6X0l6pT3N2Y8u.C5tqF5b9vR4M8t9V3z5x1y7q2w3e4r', 'System Administrator', 1);
+(1, 'admin', '$2a$10$aozGpvZJR1r2rtYybOSdTOwULNTtkPikSqMmRu6Wez16BSF/B3KaS', 'System Administrator', 1);
 
 -- 1. Categories
 INSERT OR IGNORE INTO Categories (category_id, category_name, description, is_active) VALUES
