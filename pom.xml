@@ -32,6 +32,13 @@
         </dependency>
 
 
+        <!-- FlatLaf Modern Look & Feel -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.5.4</version>
+        </dependency>
+
         <!-- JUnit 5 Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
