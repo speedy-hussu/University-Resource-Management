@@ -1,8 +1,5 @@
 package urms.ui;
 
-import org.kordamp.ikonli.material.Material;
-import org.kordamp.ikonli.swing.FontIcon;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -20,23 +17,26 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+
+import org.kordamp.ikonli.material.Material;
+import org.kordamp.ikonli.swing.FontIcon;
 
 public final class SidebarPanel {
 
     private static final int SIDEBAR_WIDTH = 220;
 
-    private static final Color SIDEBAR_BG = new Color(248, 250, 251); // Main sidebar bg
-    private static final Color BORDER_COLOR = new Color(221, 228, 232); // sidebar seperator and line under nuv  
-    private static final Color PRIMARY_BLUE = new Color(28, 78, 111); // selected button strip 
-    private static final Color ACTIVE_ITEM_BG = new Color(224, 234, 239); // Selected button highlight bg
-    private static final Color TEXT_ACTIVE = new Color(37, 71, 91); // Selected text and icon
-    private static final Color TEXT_INACTIVE = new Color(84, 98, 108); // Unselected text and icon
+    private static final Color SIDEBAR_BG = new Color(250, 250, 251); // Clean warm sidebar bg
+    private static final Color BORDER_COLOR = new Color(232, 227, 227); // Subtle divider matching warm tone  
+    private static final Color BRAND_CRIMSON = new Color(179, 32, 37); // Navrachana Logo Crimson (#B32025)
+    private static final Color ACTIVE_ITEM_BG = new Color(254, 241, 242); // Soft crimson tint highlight
+    private static final Color TEXT_ACTIVE = new Color(168, 28, 33); // Active text and icon
+    private static final Color TEXT_INACTIVE = new Color(95, 105, 115); // Unselected slate text and icon
 
     private static final Font FONT_REGULAR = new Font("SansSerif", Font.PLAIN, 14);
     private static final Font FONT_BOLD = new Font("SansSerif", Font.BOLD, 14);
@@ -74,8 +74,7 @@ public final class SidebarPanel {
         JLabel mark = new JLabel(new ImageIcon(scaledLogo));
         mark.setPreferredSize(new Dimension(45, 52));
 
-        JLabel identity = new JLabel("<html><b>NUV</b><br><span style='font-size:9px; letter-spacing:1px;'>REGISTRAR DESK</span></html>");
-        identity.setForeground(new Color(40, 53, 62));
+        JLabel identity = new JLabel("<html><b style='color:#B32025;'>NUV</b><br><span style='font-size:9px; letter-spacing:1px; color:#5D6772;'>REGISTRAR DESK</span></html>");
         identity.setFont(FONT_BRAND_TEXT);
 
         brand.add(mark);
@@ -86,8 +85,14 @@ public final class SidebarPanel {
         // Navigation Items
         ButtonGroup navigation = new ButtonGroup();
         String[] menuItems = {"Dashboard", "Resources", "Allocations", "Categories", "Users", "Reports"};
-        Material[] menuIcons = {Material.DASHBOARD, Material.BUSINESS_CENTER, Material.SWAP_HORIZ,
-                Material.CATEGORY, Material.PEOPLE, Material.ASSESSMENT};
+        Material[] menuIcons = {
+                Material.DASHBOARD,      // Modern 4-quadrant layout
+                Material.ALL_INBOX,      // Stacked storage/inventory boxes
+                Material.SWAP_HORIZ,     // Resource allocations & loan exchanges (left/right arrows)
+                Material.TOC,            // Categories
+                Material.PEOPLE,         // User accounts and roles
+                Material.INSERT_CHART    // Modern analytics and reports chart
+        };
         for (int i = 0; i < menuItems.length; i++) {
             top.add(createNavigationItem(menuItems[i], menuIcons[i], i == 0, navigation, onNavigate));
         }
@@ -104,7 +109,7 @@ public final class SidebarPanel {
                 canvas.setColor(isSelected() ? ACTIVE_ITEM_BG : SIDEBAR_BG);
                 canvas.fillRect(0, 0, getWidth(), getHeight());
                 if (isSelected()) {
-                    canvas.setColor(PRIMARY_BLUE);
+                    canvas.setColor(BRAND_CRIMSON);
                     canvas.fillRect(0, 0, 3, getHeight());
                 }
                 canvas.dispose();
@@ -123,8 +128,8 @@ public final class SidebarPanel {
         item.setOpaque(false);
         item.setSelected(selected);
         item.setActionCommand(text);
-        item.setIcon(FontIcon.of(icon, 17, selected ? TEXT_ACTIVE : TEXT_INACTIVE));
-        item.setIconTextGap(10);
+        item.setIcon(FontIcon.of(icon, 18, selected ? TEXT_ACTIVE : TEXT_INACTIVE));
+        item.setIconTextGap(12);
 
         updateStyle(item, selected);
 
