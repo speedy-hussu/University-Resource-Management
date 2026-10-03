@@ -57,6 +57,26 @@ public class DatabaseConnection {
         try (Connection conn = getConnection()) {
             System.out.println("Connecting to database: " + AppConfig.getDatabaseUrl());
 
+            // Check if existing tables use legacy INTEGER primary keys and migrate to UUID if needed
+            try (Statement checkStmt = conn.createStatement();
+                 ResultSet rs = checkStmt.executeQuery("PRAGMA table_info(Categories);")) {
+                while (rs.next()) {
+                    if ("category_id".equalsIgnoreCase(rs.getString("name"))
+                            && !"TEXT".equalsIgnoreCase(rs.getString("type"))) {
+                        System.out.println("Migrating database schema from AUTOINCREMENT to UUID...");
+                        try (Statement dropStmt = conn.createStatement()) {
+                            dropStmt.execute("PRAGMA foreign_keys = OFF;");
+                            dropStmt.execute("DROP TABLE IF EXISTS Allocations;");
+                            dropStmt.execute("DROP TABLE IF EXISTS Resources;");
+                            dropStmt.execute("DROP TABLE IF EXISTS Categories;");
+                            dropStmt.execute("DROP TABLE IF EXISTS Users;");
+                            dropStmt.execute("PRAGMA foreign_keys = ON;");
+                        }
+                        break;
+                    }
+                }
+            }
+
             // 1. Execute schema.sql
             executeSqlScript(conn, "/db/schema.sql");
             System.out.println("Database schema verified successfully.");

@@ -16,6 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import urms.ui.pages.CategoryPanel;
+import urms.ui.pages.ResourcePanel;
+import urms.util.ColorConstants;
+
+import static urms.util.ColorConstants.*;
 
 public class DefaultWindow {
 
@@ -33,14 +37,20 @@ public class DefaultWindow {
 
         // Register cards corresponding to sidebar items
         contentCards.add(createSamplePage("Dashboard", "Overview of campus assets, occupancy, and pending requests"), "Dashboard");
-        contentCards.add(createSamplePage("Resources", "Manage university rooms, equipment, labs, and assets"), "Resources");
+        ResourcePanel resourcePanel = new ResourcePanel();
+        contentCards.add(resourcePanel, "Resources");
         contentCards.add(createSamplePage("Allocations", "Track resource assignments, bookings, and schedules"), "Allocations");
         contentCards.add(new CategoryPanel(), "Categories");
         contentCards.add(createSamplePage("Users", "Manage operator accounts, faculty, and role permissions"), "Users");
         contentCards.add(createSamplePage("Reports", "Generate usage summaries, audit logs, and analytics"), "Reports");
 
         // Hook up sidebar selection callback to show the matching card
-        JComponent sidebar = SidebarPanel.createSidebar(cardName -> cardLayout.show(contentCards, cardName));
+        JComponent sidebar = SidebarPanel.createSidebar(cardName -> {
+            cardLayout.show(contentCards, cardName);
+            if ("Resources".equals(cardName)) {
+                resourcePanel.loadData();
+            }
+        });
 
         frame.add(sidebar, BorderLayout.WEST);
         frame.add(contentCards, BorderLayout.CENTER);
@@ -49,23 +59,23 @@ public class DefaultWindow {
 
     private static JPanel createSamplePage(String title, String subtitle) {
         JPanel page = new JPanel(new BorderLayout());
-        page.setBackground(new Color(242, 246, 249));
+        page.setBackground(PAGE_BACKGROUND);
 
         JPanel header = new JPanel();
         header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
-        header.setBackground(Color.WHITE);
+        header.setBackground(CARD_BACKGROUND);
         header.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(221, 228, 232)),
+                BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_SUBTLE),
                 BorderFactory.createEmptyBorder(20, 28, 20, 28)
         ));
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
-        titleLabel.setForeground(new Color(28, 78, 111));
+        titleLabel.setForeground(TEXT_PRIMARY);
 
         JLabel subtitleLabel = new JLabel(subtitle);
         subtitleLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
-        subtitleLabel.setForeground(new Color(110, 125, 136));
+        subtitleLabel.setForeground(TEXT_MUTED);
 
         header.add(titleLabel);
         header.add(Box.createVerticalStrut(4));
@@ -77,7 +87,7 @@ public class DefaultWindow {
         body.setOpaque(false);
         JLabel placeholder = new JLabel("Content for " + title + " view will be rendered here.");
         placeholder.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        placeholder.setForeground(new Color(140, 153, 163));
+        placeholder.setForeground(TEXT_MUTED);
         body.add(placeholder);
 
         page.add(body, BorderLayout.CENTER);

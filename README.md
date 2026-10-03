@@ -33,24 +33,33 @@ University-Resource-Management/
         │       │
         │       ├── model/                    # Domain POJOs & data transfer records
         │       │   ├── Category.java
-        │       │   └── CategorySummary.java
+        │       │   ├── CategorySummary.java
+        │       │   └── Resource.java
         │       │
         │       ├── dao/                      # Data Access Objects (pure SQL queries)
         │       │   ├── DatabaseConnection.java # SQLite connection pool & SQL runner
-        │       │   └── CategoryDAO.java        # Category CRUD and resource count queries
+        │       │   ├── CategoryDAO.java        # Category CRUD and resource count queries
+        │       │   └── ResourceDAO.java        # Resource CRUD and availability queries
         │       │
         │       ├── service/                  # Business logic & validation layer
+        │       │   ├── CategoryService.java    # Category rules & validation
+        │       │   └── ResourceService.java    # Resource inventory rules & validation
         │       │
         │       ├── ui/                       # Desktop Swing UI components
         │       │   ├── DefaultWindow.java    # Main application shell with CardLayout
         │       │   ├── LoginWindow.java      # Operator authentication dialog
         │       │   ├── SidebarPanel.java     # Branded navigation drawer with vector icons
         │       │   │
+        │       │   ├── dialogs/              # Modal dialogs & input forms
+        │       │   │   └── ResourceModalDialog.java # Resource creation & editing modal
+        │       │   │
         │       │   └── pages/                # Independent page view panels
-        │       │       └── CategoryPanel.java # Category management screen
+        │       │       ├── CategoryPanel.java # Category management screen
+        │       │       └── ResourcePanel.java # Resource inventory and tracking screen
         │       │
         │       └── util/
-        │           └── AppConfig.java        # Cross-platform environment and database path resolution
+        │           ├── AppConfig.java        # Cross-platform environment and database path resolution
+        │           └── ColorConstants.java   # Centralized university branding & UI theme palette
         │
         └── resources/
             ├── db/
@@ -75,12 +84,12 @@ $$\text{UI (Pages)} \longrightarrow \text{Service} \longrightarrow \text{DAO} \l
 
 ## 🗄️ Database Schema
 
-The SQLite schema (`src/main/resources/db/schema.sql`) manages four core domain entities:
+The SQLite schema (`src/main/resources/db/schema.sql`) manages four core domain entities using standard UUID (`TEXT`) primary and foreign keys:
 
-1. **`Users`**: Operator credentials (`user_id`, `username`, `password_hash`, `full_name`, `is_active`).
-2. **`Categories`**: Resource taxonomy groupings (`category_id`, `category_name`, `description`, `is_active`).
-3. **`Resources`**: Equipment, labs, and asset inventory (`resource_id`, `resource_name`, `category_id`, `resource_type`, `location`, `total_quantity`, `available_quantity`, `is_active`).
-4. **`Allocations`**: Checkouts, loans, and returns (`allocation_id`, `resource_id`, `borrower_id`, `borrower_name`, `borrower_type`, `quantity`, `issue_date`, `due_date`, `return_date`, `status`, `issued_by`, `remarks`).
+1. **`Users`**: Operator credentials (`user_id` [UUID], `username`, `password_hash`, `full_name`, `is_active`).
+2. **`Categories`**: Resource taxonomy groupings (`category_id` [UUID], `category_name`, `description`, `is_active`).
+3. **`Resources`**: Equipment, labs, and asset inventory (`resource_id` [UUID], `resource_name`, `category_id` [UUID FK], `location`, `total_quantity`, `available_quantity`, `is_active`).
+4. **`Allocations`**: Checkouts, loans, and returns (`allocation_id` [UUID], `resource_id` [UUID FK], `borrower_id`, `borrower_name`, `borrower_type`, `quantity`, `issue_date`, `due_date`, `return_date`, `status`, `issued_by`, `remarks`).
 
 ---
 

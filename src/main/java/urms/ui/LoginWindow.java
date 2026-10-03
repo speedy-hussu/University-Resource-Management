@@ -1,6 +1,9 @@
 package urms.ui;
 
 import urms.dao.DatabaseConnection;
+import urms.util.ColorConstants;
+
+import static urms.util.ColorConstants.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -22,14 +25,14 @@ public final class LoginWindow {
 
         JPanel root = new JPanel(new BorderLayout(0, 18));
         root.setBorder(new EmptyBorder(32, 42, 30, 42));
-        root.setBackground(new Color(246, 248, 251));
+        root.setBackground(PAGE_BACKGROUND);
 
         JLabel heading = new JLabel("University Resource Register");
         heading.setFont(new Font("SansSerif", Font.BOLD, 23));
-        heading.setForeground(new Color(27, 48, 76));
+        heading.setForeground(TEXT_PRIMARY);
 
         JLabel subtitle = new JLabel("Sign in to manage campus resources");
-        subtitle.setForeground(new Color(92, 105, 122));
+        subtitle.setForeground(TEXT_MUTED);
 
         JPanel header = new JPanel();
         header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
@@ -53,12 +56,12 @@ public final class LoginWindow {
 
         JButton signInButton = new JButton("Sign in");
         signInButton.setForeground(Color.WHITE);
-        signInButton.setBackground(new Color(35, 93, 153));
+        signInButton.setBackground(BLUE_ACCENT);
         signInButton.setFocusPainted(false);
         signInButton.setBorder(BorderFactory.createEmptyBorder(11, 18, 11, 18));
 
         JLabel status = new JLabel(" ");
-        status.setForeground(new Color(180, 55, 55));
+        status.setForeground(ERROR_RED);
 
         JPanel actions = new JPanel(new BorderLayout(0, 8));
         actions.setOpaque(false);
@@ -108,14 +111,14 @@ public final class LoginWindow {
     private static JLabel labelFor(String text) {
         JLabel label = new JLabel(text);
         label.setFont(label.getFont().deriveFont(Font.BOLD, 12f));
-        label.setForeground(new Color(57, 69, 84));
+        label.setForeground(TEXT_DARK);
         return label;
     }
 
     private static void styleField(JTextField field) {
         field.setFont(field.getFont().deriveFont(14f));
         field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(196, 205, 216)),
+                BorderFactory.createLineBorder(BORDER_FIELD),
                 BorderFactory.createEmptyBorder(8, 9, 8, 9)));
     }
 }
