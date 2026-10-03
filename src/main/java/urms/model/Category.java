@@ -1,28 +1,30 @@
 package urms.model;
 
 /**
- * Domain entity representing a category in the Categories table.
+ * Domain entity representing a category in the Categories table using a UUID primary key.
  */
 public class Category {
-    private int categoryId;
+    private String categoryId;
     private String categoryName;
     private String description;
     private boolean isActive;
 
-    public Category() {}
+    public Category() {
+        this.isActive = true;
+    }
 
-    public Category(int categoryId, String categoryName, String description, boolean isActive) {
+    public Category(String categoryId, String categoryName, String description, boolean isActive) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.description = description;
         this.isActive = isActive;
     }
 
-    public int getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 

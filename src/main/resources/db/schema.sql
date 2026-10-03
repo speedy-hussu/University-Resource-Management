@@ -1,10 +1,10 @@
 -- University Resource Management System (URMS)
--- Simple SQLite Database Schema
+-- SQLite Database Schema with UUID Primary Keys
 PRAGMA foreign_keys = ON;
 
 -- 0. User Table (operator login)
 CREATE TABLE IF NOT EXISTS Users (
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT PRIMARY KEY,
     username TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
     full_name TEXT,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Users (
 
 -- 1. Categories Table
 CREATE TABLE IF NOT EXISTS Categories (
-    category_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category_id TEXT PRIMARY KEY,
     category_name TEXT NOT NULL UNIQUE,
     description TEXT,
     is_active INTEGER NOT NULL DEFAULT 1
@@ -22,9 +22,9 @@ CREATE TABLE IF NOT EXISTS Categories (
 
 -- 2. Resources Table
 CREATE TABLE IF NOT EXISTS Resources (
-    resource_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    resource_id TEXT PRIMARY KEY,
     resource_name TEXT NOT NULL,
-    category_id INTEGER NOT NULL,
+    category_id TEXT NOT NULL,
     resource_type TEXT NOT NULL DEFAULT 'CONSUMABLE',
     location TEXT,
     total_quantity INTEGER NOT NULL,
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS Resources (
 
 -- 3. Allocations Table
 CREATE TABLE IF NOT EXISTS Allocations (
-    allocation_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    resource_id INTEGER NOT NULL,
+    allocation_id TEXT PRIMARY KEY,
+    resource_id TEXT NOT NULL,
     borrower_id TEXT NOT NULL,
     borrower_name TEXT NOT NULL,
     borrower_type TEXT NOT NULL,
