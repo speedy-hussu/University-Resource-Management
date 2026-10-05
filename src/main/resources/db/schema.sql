@@ -2,17 +2,29 @@
 -- SQLite Database Schema with UUID Primary Keys
 PRAGMA foreign_keys = ON;
 
--- 0. User Table (operator login)
-CREATE TABLE IF NOT EXISTS Users (
-    user_id TEXT PRIMARY KEY,
+-- 0. Admin Table (operator login & session management)
+CREATE TABLE IF NOT EXISTS Admin (
+    admin_id TEXT PRIMARY KEY,
     username TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
     full_name TEXT,
+    session_token TEXT,
+    token_expiry TEXT,
     is_active INTEGER NOT NULL DEFAULT 1,
     created_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))
 );
 
--- 1. Categories Table
+-- 1. Users Table (campus directory: students & faculty borrowers)
+CREATE TABLE IF NOT EXISTS Users (
+    user_id TEXT PRIMARY KEY,
+    enrollment_no TEXT NOT NULL UNIQUE,
+    full_name TEXT NOT NULL,
+    role TEXT NOT NULL CHECK(role IN ('STUDENT', 'FACULTY')),
+    is_active INTEGER NOT NULL DEFAULT 1,
+    created_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))
+);
+
+-- 2. Categories Table
 CREATE TABLE IF NOT EXISTS Categories (
     category_id TEXT PRIMARY KEY,
     category_name TEXT NOT NULL UNIQUE,
@@ -20,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Categories (
     is_active INTEGER NOT NULL DEFAULT 1
 );
 
--- 2. Resources Table
+-- 3. Resources Table
 CREATE TABLE IF NOT EXISTS Resources (
     resource_id TEXT PRIMARY KEY,
     resource_name TEXT NOT NULL,
@@ -35,13 +47,11 @@ CREATE TABLE IF NOT EXISTS Resources (
         REFERENCES Categories(category_id)
 );
 
--- 3. Allocations Table
+-- 4. Allocations Table
 CREATE TABLE IF NOT EXISTS Allocations (
     allocation_id TEXT PRIMARY KEY,
     resource_id TEXT NOT NULL,
-    borrower_id TEXT NOT NULL,
-    borrower_name TEXT NOT NULL,
-    borrower_type TEXT NOT NULL,
+    user_id TEXT NOT NULL,
     quantity INTEGER NOT NULL DEFAULT 1,
     issue_date TEXT NOT NULL DEFAULT (datetime('now','localtime')),
     due_date TEXT NOT NULL,
@@ -50,5 +60,7 @@ CREATE TABLE IF NOT EXISTS Allocations (
     issued_by TEXT,
     remarks TEXT,
     FOREIGN KEY (resource_id)
-        REFERENCES Resources(resource_id)
+        REFERENCES Resources(resource_id),
+    FOREIGN KEY (user_id)
+        REFERENCES Users(user_id)
 );

@@ -3,22 +3,28 @@
 -- ==========================================================
 
 -- 0. Default Operator: admin / admin123 (BCrypt hash)
-UPDATE Users
+UPDATE Admin
 SET password_hash = '$2a$10$aozGpvZJR1r2rtYybOSdTOwULNTtkPikSqMmRu6Wez16BSF/B3KaS'
 WHERE username = 'admin'
 	AND password_hash = '$2a$10$wN2a3R2V6X0l6pT3N2Y8u.C5tqF5b9vR4M8t9V3z5x1y7q2w3e4r';
 
-INSERT OR IGNORE INTO Users (user_id, username, password_hash, full_name, is_active) VALUES
+INSERT OR IGNORE INTO Admin (admin_id, username, password_hash, full_name, is_active) VALUES
 ('a0000000-0000-0000-0000-000000000001', 'admin', '$2a$10$aozGpvZJR1r2rtYybOSdTOwULNTtkPikSqMmRu6Wez16BSF/B3KaS', 'System Administrator', 1);
 
--- 1. Categories
+-- 1. Campus Users (Students & Faculty Directory)
+INSERT OR IGNORE INTO Users (user_id, enrollment_no, full_name, role, is_active) VALUES
+('u1000000-0000-0000-0000-000000000001', '22BCE104', 'Aryan Verma', 'STUDENT', 1),
+('u2000000-0000-0000-0000-000000000002', 'FAC-CSE-014', 'Dr. Rajesh Sharma', 'FACULTY', 1),
+('u3000000-0000-0000-0000-000000000003', '22BEC045', 'Kavya Nair', 'STUDENT', 1);
+
+-- 2. Categories
 INSERT OR IGNORE INTO Categories (category_id, category_name, description, is_active) VALUES
 ('c1000000-0000-0000-0000-000000000001', 'Lab Equipment', 'Electronics, IoT, and hardware instruments', 1),
 ('c2000000-0000-0000-0000-000000000002', 'Audio-Visual', 'Projectors, camcorders, and display gear', 1),
 ('c3000000-0000-0000-0000-000000000003', 'Campus Venues', 'Auditoriums, seminar halls, and meeting rooms', 1),
 ('c4000000-0000-0000-0000-000000000004', 'Consumable Supplies', '3D printing filaments, jumper wires, components', 1);
 
--- 2. Resources
+-- 3. Resources
 INSERT OR IGNORE INTO Resources (resource_id, resource_name, category_id, resource_type, location, total_quantity, available_quantity, is_active) VALUES
 ('r1000000-0000-0000-0000-000000000001', 'Rigol Digital Oscilloscope (50MHz)', 'c1000000-0000-0000-0000-000000000001', 'EQUIPMENT', 'Electronics Lab Bench 2', 5, 4, 1),
 ('r2000000-0000-0000-0000-000000000002', 'Siglent Function Generator (25MHz)', 'c1000000-0000-0000-0000-000000000001', 'EQUIPMENT', 'Electronics Lab Shelf 3', 4, 4, 1),
@@ -28,8 +34,8 @@ INSERT OR IGNORE INTO Resources (resource_id, resource_name, category_id, resour
 ('r6000000-0000-0000-0000-000000000006', 'PLA 3D Printer Filament 1kg Spool', 'c4000000-0000-0000-0000-000000000004', 'CONSUMABLE', '3D Fabrication Lab', 20, 18, 1),
 ('r7000000-0000-0000-0000-000000000007', 'Male-to-Male Jumper Wire Pack (50pcs)', 'c4000000-0000-0000-0000-000000000004', 'CONSUMABLE', 'IoT Research Lab', 50, 45, 1);
 
--- 3. Allocations (Active / Returned sample records)
-INSERT OR IGNORE INTO Allocations (allocation_id, resource_id, borrower_id, borrower_name, borrower_type, quantity, issue_date, due_date, return_date, status, issued_by, remarks) VALUES
-('a1000000-0000-0000-0000-000000000001', 'r1000000-0000-0000-0000-000000000001', '22BCE104', 'Aryan Verma', 'STUDENT', 1, '2026-09-08 10:00:00', '2026-09-08 14:00:00', NULL, 'ACTIVE', 'admin', 'DSP Lab filter circuit experiment'),
-('a2000000-0000-0000-0000-000000000002', 'r3000000-0000-0000-0000-000000000003', 'FAC-CSE-014', 'Dr. Rajesh Sharma', 'FACULTY', 1, '2026-09-08 09:30:00', '2026-09-08 13:30:00', NULL, 'ACTIVE', 'admin', 'Department guest lecture'),
-('a3000000-0000-0000-0000-000000000003', 'r6000000-0000-0000-0000-000000000006', '22BEC045', 'Kavya Nair', 'STUDENT', 2, '2026-09-07 11:00:00', '2026-09-07 17:00:00', '2026-09-07 16:45:00', 'RETURNED', 'admin', 'Capstone project prototyping');
+-- 4. Allocations (Active / Returned sample records)
+INSERT OR IGNORE INTO Allocations (allocation_id, resource_id, user_id, quantity, issue_date, due_date, return_date, status, issued_by, remarks) VALUES
+('a1000000-0000-0000-0000-000000000001', 'r1000000-0000-0000-0000-000000000001', 'u1000000-0000-0000-0000-000000000001', 1, '2026-09-08 10:00:00', '2026-09-08 14:00:00', NULL, 'ACTIVE', 'admin', 'DSP Lab filter circuit experiment'),
+('a2000000-0000-0000-0000-000000000002', 'r3000000-0000-0000-0000-000000000003', 'u2000000-0000-0000-0000-000000000002', 1, '2026-09-08 09:30:00', '2026-09-08 13:30:00', NULL, 'ACTIVE', 'admin', 'Department guest lecture'),
+('a3000000-0000-0000-0000-000000000003', 'r6000000-0000-0000-0000-000000000006', 'u3000000-0000-0000-0000-000000000003', 2, '2026-09-07 11:00:00', '2026-09-07 17:00:00', '2026-09-07 16:45:00', 'RETURNED', 'admin', 'Capstone project prototyping');
