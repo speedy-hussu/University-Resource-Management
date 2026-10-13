@@ -90,6 +90,7 @@ public final class LoginWindow {
                     passwordField.setText("");
                     passwordField.requestFocusInWindow();
                 } else {
+                    DatabaseConnection.createSession(username);
                     frame.dispose();
                     DefaultWindow.showWindow(fullName);
                 }
