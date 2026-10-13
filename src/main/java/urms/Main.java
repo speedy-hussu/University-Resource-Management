@@ -1,11 +1,10 @@
 package urms;
 
 import javax.swing.SwingUtilities;
-
-import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.UIManager;
 
 import urms.dao.DatabaseConnection;
-import urms.ui.DefaultWindow;
+import urms.ui.LoginWindow;
 
 /**
  * Application Entry Point (Orchestrator).
@@ -14,8 +13,12 @@ import urms.ui.DefaultWindow;
 public class Main {
 
     public static void main(String[] args) {
-        // 1. Setup Modern Flat Look and Feel
-        FlatLightLaf.setup();
+        // 1. Setup System Look and Feel
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.err.println("Could not load system look and feel: " + e.getMessage());
+        }
 
         // 2. Initialize Database & Tables (Runs schema.sql and seed.sql, fails loudly on error)
         System.out.println("Starting application & initializing database...");
@@ -23,7 +26,7 @@ public class Main {
 
         // 3. Launch login UI on the Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> {
-            DefaultWindow.showWindow("Admin");
+            LoginWindow.showWindow();
             System.out.println("Login UI launched successfully.");
         });
     }

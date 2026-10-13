@@ -2,7 +2,7 @@ package urms.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -17,7 +17,8 @@ import javax.swing.JPanel;
 
 import urms.ui.pages.CategoryPanel;
 import urms.ui.pages.ResourcePanel;
-import urms.util.ColorConstants;
+import urms.ui.pages.UserPanel;
+
 
 import static urms.util.ColorConstants.*;
 
@@ -41,7 +42,8 @@ public class DefaultWindow {
         contentCards.add(resourcePanel, "Resources");
         contentCards.add(createSamplePage("Allocations", "Track resource assignments, bookings, and schedules"), "Allocations");
         contentCards.add(new CategoryPanel(), "Categories");
-        contentCards.add(createSamplePage("Users", "Manage operator accounts, faculty, and role permissions"), "Users");
+        UserPanel userPanel = new UserPanel();
+        contentCards.add(userPanel, "Users");
         contentCards.add(createSamplePage("Reports", "Generate usage summaries, audit logs, and analytics"), "Reports");
 
         // Hook up sidebar selection callback to show the matching card
@@ -49,6 +51,8 @@ public class DefaultWindow {
             cardLayout.show(contentCards, cardName);
             if ("Resources".equals(cardName)) {
                 resourcePanel.loadData();
+            } else if ("Users".equals(cardName)) {
+                userPanel.refreshData();
             }
         });
 
