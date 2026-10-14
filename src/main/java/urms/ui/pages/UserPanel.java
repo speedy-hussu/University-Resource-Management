@@ -9,7 +9,21 @@ import urms.ui.dialogs.UserModalDialog;
 
 import static urms.util.ColorConstants.*;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -18,9 +32,19 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,6 +125,8 @@ public class UserPanel extends JPanel {
         addBtn.setForeground(Color.WHITE);
         addBtn.setBackground(BRAND_CRIMSON);
         addBtn.setFocusPainted(false);
+        addBtn.setContentAreaFilled(false);
+        addBtn.setOpaque(true);
         addBtn.setIcon(FontIcon.of(Material.PERSON_ADD, 18, Color.WHITE));
         addBtn.setIconTextGap(8);
         addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -167,6 +193,8 @@ public class UserPanel extends JPanel {
         refreshBtn.setPreferredSize(new Dimension(36, 36));
         refreshBtn.setBackground(CARD_BACKGROUND);
         refreshBtn.setFocusPainted(false);
+        refreshBtn.setContentAreaFilled(false);
+        refreshBtn.setOpaque(true);
         refreshBtn.setBorder(new LineBorder(BORDER_FIELD, 1, true));
         refreshBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         refreshBtn.addActionListener(e -> {
@@ -195,6 +223,8 @@ public class UserPanel extends JPanel {
         editButton.setFont(new Font("SansSerif", Font.PLAIN, 13));
         editButton.setBackground(CARD_BACKGROUND);
         editButton.setFocusPainted(false);
+        editButton.setContentAreaFilled(false);
+        editButton.setOpaque(true);
         editButton.setEnabled(false);
         editButton.setBorder(new CompoundBorder(new LineBorder(BORDER_FIELD, 1, true), new EmptyBorder(6, 12, 6, 12)));
         editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -206,6 +236,8 @@ public class UserPanel extends JPanel {
         deleteButton.setForeground(ERROR_RED);
         deleteButton.setBackground(CARD_BACKGROUND);
         deleteButton.setFocusPainted(false);
+        deleteButton.setContentAreaFilled(false);
+        deleteButton.setOpaque(true);
         deleteButton.setEnabled(false);
         deleteButton.setBorder(new CompoundBorder(new LineBorder(ERROR_BORDER, 1, true), new EmptyBorder(6, 12, 6, 12)));
         deleteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));

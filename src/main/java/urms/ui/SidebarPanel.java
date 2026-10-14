@@ -111,6 +111,8 @@ public final class SidebarPanel {
         logoutBtn.setForeground(Color.WHITE);
         logoutBtn.setBackground(BRAND_CRIMSON);
         logoutBtn.setFocusPainted(false);
+        logoutBtn.setContentAreaFilled(false);
+        logoutBtn.setOpaque(true);
         logoutBtn.setIcon(FontIcon.of(Material.LOGOUT, 18, Color.WHITE));
         logoutBtn.setIconTextGap(8);
         logoutBtn.setHorizontalAlignment(SwingConstants.CENTER);

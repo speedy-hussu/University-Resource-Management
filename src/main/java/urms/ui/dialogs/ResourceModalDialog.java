@@ -10,9 +10,37 @@ import urms.service.ResourceService;
 
 import static urms.util.ColorConstants.*;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Window;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import java.util.List;
 
 /**
@@ -192,31 +220,69 @@ public class ResourceModalDialog extends JDialog {
     }
 
     private JPanel createFooterPanel() {
-        JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 16));
+        JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 14, 18));
         footer.setBackground(TABLE_HEADER_BG);
         footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, BORDER_CARD));
 
+        // --- Cancel Button (ghost style with hover) ---
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        cancelButton.setFont(new Font("SansSerif", Font.BOLD, 13));
         cancelButton.setForeground(TEXT_SLATE);
         cancelButton.setBackground(CARD_BACKGROUND);
         cancelButton.setFocusPainted(false);
+        cancelButton.setContentAreaFilled(false);
+        cancelButton.setOpaque(true);
+        cancelButton.setIcon(FontIcon.of(Material.CLOSE, 15, TEXT_SLATE));
+        cancelButton.setIconTextGap(6);
         cancelButton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER_FIELD, 1, true),
-                new EmptyBorder(8, 16, 8, 16)
+                new EmptyBorder(9, 20, 9, 20)
         ));
         cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cancelButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                cancelButton.setBackground(PAGE_BACKGROUND);
+                cancelButton.setForeground(TEXT_DARK);
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                cancelButton.setBackground(CARD_BACKGROUND);
+                cancelButton.setForeground(TEXT_SLATE);
+            }
+        });
         cancelButton.addActionListener(e -> dispose());
 
-        saveButton = new JButton(resourceToEdit == null ? "Add Resource" : "Save Changes");
+        // --- Primary Action Button (Crimson with hover darkening) ---
+        boolean isEditing = (resourceToEdit != null);
+        Material primaryIcon = isEditing ? Material.SAVE : Material.ADD_BOX;
+        String primaryText = isEditing ? "Save Changes" : "Add Resource";
+
+        saveButton = new JButton(primaryText);
         saveButton.setFont(new Font("SansSerif", Font.BOLD, 13));
         saveButton.setForeground(Color.WHITE);
         saveButton.setBackground(BRAND_CRIMSON);
         saveButton.setFocusPainted(false);
-        saveButton.setIcon(FontIcon.of(Material.CHECK, 16, Color.WHITE));
-        saveButton.setBorder(new EmptyBorder(9, 20, 9, 20));
+        saveButton.setContentAreaFilled(false);
+        saveButton.setOpaque(true);
+        saveButton.setIcon(FontIcon.of(primaryIcon, 16, Color.WHITE));
+        saveButton.setIconTextGap(8);
+        saveButton.setBorder(new EmptyBorder(10, 24, 10, 24));
         saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
+        saveButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (saveButton.isEnabled()) {
+                    saveButton.setBackground(BRAND_CRIMSON_HOVER);
+                }
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (saveButton.isEnabled()) {
+                    saveButton.setBackground(BRAND_CRIMSON);
+                }
+            }
+        });
         saveButton.addActionListener(e -> onSave());
 
         footer.add(cancelButton);
