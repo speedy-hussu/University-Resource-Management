@@ -6,12 +6,8 @@ import urms.model.User;
 import urms.service.UserService;
 import urms.ui.dialogs.UserModalDialog;
 
-
 import static urms.util.ColorConstants.*;
 
-<<<<<<< HEAD
-import javax.swing.*;
-=======
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,7 +23,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
->>>>>>> 3223ef6f407c193dbc17b8d9fa3ebfd74b819eb4
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -36,11 +31,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-<<<<<<< HEAD
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-=======
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -54,14 +44,15 @@ import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
->>>>>>> 3223ef6f407c193dbc17b8d9fa3ebfd74b819eb4
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Modern Campus User Management Page.
- * Displays campus borrowers (students and faculty members) in a themed FlatLaf data table
- * with real-time search, role filters, status badges, and modal registration forms.
+ * Displays campus borrowers (students and faculty members) in a themed FlatLaf
+ * data table
+ * with real-time search, role filters, status badges, and modal registration
+ * forms.
  * Mirrors the architecture and UI conventions of ResourcePanel.java.
  */
 public class UserPanel extends JPanel {
@@ -99,15 +90,15 @@ public class UserPanel extends JPanel {
     }
 
     /**
-     * Top branded header matching DefaultWindow / ResourcePanel / CategoryPanel styling.
+     * Top branded header matching DefaultWindow / ResourcePanel / CategoryPanel
+     * styling.
      */
     private JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(CARD_BACKGROUND);
         header.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_SUBTLE),
-                new EmptyBorder(18, 28, 18, 28)
-        ));
+                new EmptyBorder(18, 28, 18, 28)));
 
         // Left text block
         JPanel left = new JPanel();
@@ -135,11 +126,8 @@ public class UserPanel extends JPanel {
         addBtn.setForeground(Color.WHITE);
         addBtn.setBackground(BRAND_CRIMSON);
         addBtn.setFocusPainted(false);
-<<<<<<< HEAD
-=======
         addBtn.setContentAreaFilled(false);
         addBtn.setOpaque(true);
->>>>>>> 3223ef6f407c193dbc17b8d9fa3ebfd74b819eb4
         addBtn.setIcon(FontIcon.of(Material.PERSON_ADD, 18, Color.WHITE));
         addBtn.setIconTextGap(8);
         addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -173,27 +161,34 @@ public class UserPanel extends JPanel {
         searchField.putClientProperty("JTextField.leadingIcon", FontIcon.of(Material.SEARCH, 16, ICON_MUTED));
         searchField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(BORDER_FIELD, 1, true),
-                new EmptyBorder(4, 8, 4, 8)
-        ));
+                new EmptyBorder(4, 8, 4, 8)));
 
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void insertUpdate(DocumentEvent e) { applyFilters(); }
+            public void insertUpdate(DocumentEvent e) {
+                applyFilters();
+            }
+
             @Override
-            public void removeUpdate(DocumentEvent e) { applyFilters(); }
+            public void removeUpdate(DocumentEvent e) {
+                applyFilters();
+            }
+
             @Override
-            public void changedUpdate(DocumentEvent e) { applyFilters(); }
+            public void changedUpdate(DocumentEvent e) {
+                applyFilters();
+            }
         });
 
         // Role Filter Combo
-        roleFilterCombo = new JComboBox<>(new String[]{"All Roles", "STUDENT", "FACULTY"});
+        roleFilterCombo = new JComboBox<>(new String[] { "All Roles", "STUDENT", "FACULTY" });
         roleFilterCombo.setPreferredSize(new Dimension(150, 36));
         roleFilterCombo.setFont(new Font("SansSerif", Font.PLAIN, 13));
         roleFilterCombo.setBackground(CARD_BACKGROUND);
         roleFilterCombo.addActionListener(e -> applyFilters());
 
         // Status Filter Combo
-        statusFilterCombo = new JComboBox<>(new String[]{"All Status", "Active Only", "Inactive"});
+        statusFilterCombo = new JComboBox<>(new String[] { "All Status", "Active Only", "Inactive" });
         statusFilterCombo.setPreferredSize(new Dimension(140, 36));
         statusFilterCombo.setFont(new Font("SansSerif", Font.PLAIN, 13));
         statusFilterCombo.setBackground(CARD_BACKGROUND);
@@ -206,11 +201,8 @@ public class UserPanel extends JPanel {
         refreshBtn.setPreferredSize(new Dimension(36, 36));
         refreshBtn.setBackground(CARD_BACKGROUND);
         refreshBtn.setFocusPainted(false);
-<<<<<<< HEAD
-=======
         refreshBtn.setContentAreaFilled(false);
         refreshBtn.setOpaque(true);
->>>>>>> 3223ef6f407c193dbc17b8d9fa3ebfd74b819eb4
         refreshBtn.setBorder(new LineBorder(BORDER_FIELD, 1, true));
         refreshBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         refreshBtn.addActionListener(e -> {
@@ -239,11 +231,8 @@ public class UserPanel extends JPanel {
         editButton.setFont(new Font("SansSerif", Font.PLAIN, 13));
         editButton.setBackground(CARD_BACKGROUND);
         editButton.setFocusPainted(false);
-<<<<<<< HEAD
-=======
         editButton.setContentAreaFilled(false);
         editButton.setOpaque(true);
->>>>>>> 3223ef6f407c193dbc17b8d9fa3ebfd74b819eb4
         editButton.setEnabled(false);
         editButton.setBorder(new CompoundBorder(new LineBorder(BORDER_FIELD, 1, true), new EmptyBorder(6, 12, 6, 12)));
         editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -255,13 +244,11 @@ public class UserPanel extends JPanel {
         deleteButton.setForeground(ERROR_RED);
         deleteButton.setBackground(CARD_BACKGROUND);
         deleteButton.setFocusPainted(false);
-<<<<<<< HEAD
-=======
         deleteButton.setContentAreaFilled(false);
         deleteButton.setOpaque(true);
->>>>>>> 3223ef6f407c193dbc17b8d9fa3ebfd74b819eb4
         deleteButton.setEnabled(false);
-        deleteButton.setBorder(new CompoundBorder(new LineBorder(ERROR_BORDER, 1, true), new EmptyBorder(6, 12, 6, 12)));
+        deleteButton
+                .setBorder(new CompoundBorder(new LineBorder(ERROR_BORDER, 1, true), new EmptyBorder(6, 12, 6, 12)));
         deleteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         deleteButton.addActionListener(e -> deleteSelectedUser());
 
@@ -434,7 +421,7 @@ public class UserPanel extends JPanel {
 
         int serialNumber = 1;
         for (User u : users) {
-            tableModel.addRow(new Object[]{
+            tableModel.addRow(new Object[] {
                     serialNumber++,
                     u.getEnrollmentNo(),
                     u.getFullName(),
@@ -485,8 +472,7 @@ public class UserPanel extends JPanel {
                         + selected.getFullName() + "' (" + selected.getEnrollmentNo() + ")?",
                 "Confirm Deactivation Request",
                 JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
-        );
+                JOptionPane.WARNING_MESSAGE);
 
         if (choice == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(
@@ -494,13 +480,13 @@ public class UserPanel extends JPanel {
                     "Campus member records are permanently preserved to safeguard allocation audits and loan histories.\n"
                             + "To mark an account as inactive or archive credentials, please submit a request to the University Registrar.",
                     "Audit Protected Record",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
     /**
-     * Custom renderer for rendering colorful pill badges for Roles (STUDENT vs FACULTY).
+     * Custom renderer for rendering colorful pill badges for Roles (STUDENT vs
+     * FACULTY).
      */
     private static class RoleBadgeRenderer extends DefaultTableCellRenderer {
         private final JLabel badge = new JLabel();
@@ -515,8 +501,10 @@ public class UserPanel extends JPanel {
         }
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            panel.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? CARD_BACKGROUND : TABLE_ROW_ALT));
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
+            panel.setBackground(
+                    isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? CARD_BACKGROUND : TABLE_ROW_ALT));
 
             String role = (value != null) ? value.toString() : "";
             badge.setText(role);
@@ -525,12 +513,14 @@ public class UserPanel extends JPanel {
                 // Purple / Plum badge for Faculty
                 badge.setBackground(new Color(243, 232, 255));
                 badge.setForeground(new Color(126, 34, 206));
-                badge.setBorder(new CompoundBorder(new LineBorder(new Color(216, 180, 254), 1, true), new EmptyBorder(3, 10, 3, 10)));
+                badge.setBorder(new CompoundBorder(new LineBorder(new Color(216, 180, 254), 1, true),
+                        new EmptyBorder(3, 10, 3, 10)));
             } else {
                 // Blue badge for Student
                 badge.setBackground(new Color(239, 246, 255));
                 badge.setForeground(new Color(29, 78, 216));
-                badge.setBorder(new CompoundBorder(new LineBorder(new Color(191, 219, 254), 1, true), new EmptyBorder(3, 10, 3, 10)));
+                badge.setBorder(new CompoundBorder(new LineBorder(new Color(191, 219, 254), 1, true),
+                        new EmptyBorder(3, 10, 3, 10)));
             }
 
             return panel;
@@ -553,8 +543,10 @@ public class UserPanel extends JPanel {
         }
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            panel.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? CARD_BACKGROUND : TABLE_ROW_ALT));
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
+            panel.setBackground(
+                    isSelected ? table.getSelectionBackground() : (row % 2 == 0 ? CARD_BACKGROUND : TABLE_ROW_ALT));
 
             String status = (value != null) ? value.toString() : "";
             badge.setText(status);
@@ -562,11 +554,13 @@ public class UserPanel extends JPanel {
             if ("ACTIVE".equalsIgnoreCase(status)) {
                 badge.setBackground(STATUS_AVAILABLE_BG);
                 badge.setForeground(STATUS_AVAILABLE_TEXT);
-                badge.setBorder(new CompoundBorder(new LineBorder(STATUS_AVAILABLE_BORDER, 1, true), new EmptyBorder(3, 8, 3, 8)));
+                badge.setBorder(new CompoundBorder(new LineBorder(STATUS_AVAILABLE_BORDER, 1, true),
+                        new EmptyBorder(3, 8, 3, 8)));
             } else {
                 badge.setBackground(STATUS_OUT_OF_STOCK_BG);
                 badge.setForeground(STATUS_OUT_OF_STOCK_TEXT);
-                badge.setBorder(new CompoundBorder(new LineBorder(STATUS_OUT_OF_STOCK_BORDER, 1, true), new EmptyBorder(3, 8, 3, 8)));
+                badge.setBorder(new CompoundBorder(new LineBorder(STATUS_OUT_OF_STOCK_BORDER, 1, true),
+                        new EmptyBorder(3, 8, 3, 8)));
             }
 
             return panel;

@@ -5,16 +5,6 @@ import org.kordamp.ikonli.swing.FontIcon;
 import urms.model.User;
 import urms.service.UserService;
 
-<<<<<<< HEAD
-
-import static urms.util.ColorConstants.*;
-
-import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import java.awt.*;
-=======
 import static urms.util.ColorConstants.*;
 
 import javax.swing.BorderFactory;
@@ -45,7 +35,6 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
->>>>>>> 3223ef6f407c193dbc17b8d9fa3ebfd74b819eb4
 
 /**
  * Modern modal dialog for registering campus borrowers (students and faculty)
@@ -64,7 +53,8 @@ public class UserModalDialog extends JDialog {
     private JButton saveButton;
 
     public UserModalDialog(Window owner, User userToEdit, Runnable onSuccessCallback) {
-        super(owner, userToEdit == null ? "Register Campus User" : "Campus User Details", ModalityType.APPLICATION_MODAL);
+        super(owner, userToEdit == null ? "Register Campus User" : "Campus User Details",
+                ModalityType.APPLICATION_MODAL);
         this.userToEdit = userToEdit;
         this.onSuccessCallback = onSuccessCallback;
 
@@ -97,8 +87,7 @@ public class UserModalDialog extends JDialog {
         header.setBackground(MODAL_HEADER_BG);
         header.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_SUBTLE),
-                new EmptyBorder(20, 24, 20, 24)
-        ));
+                new EmptyBorder(20, 24, 20, 24)));
 
         // Crimson circular badge for icon
         JPanel iconBadge = new JPanel(new GridBagLayout());
@@ -149,8 +138,7 @@ public class UserModalDialog extends JDialog {
         errorBanner.setFont(new Font("SansSerif", Font.BOLD, 12));
         errorBanner.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(ERROR_BORDER, 1, true),
-                new EmptyBorder(8, 12, 8, 12)
-        ));
+                new EmptyBorder(8, 12, 8, 12)));
         errorBanner.setVisible(false);
 
         JPanel fieldsPanel = new JPanel(new GridBagLayout());
@@ -200,11 +188,13 @@ public class UserModalDialog extends JDialog {
             if (userToEdit.isActive()) {
                 chipLabel.setBackground(STATUS_AVAILABLE_BG);
                 chipLabel.setForeground(STATUS_AVAILABLE_TEXT);
-                chipLabel.setBorder(new CompoundBorder(new LineBorder(STATUS_AVAILABLE_BORDER, 1, true), new EmptyBorder(4, 10, 4, 10)));
+                chipLabel.setBorder(new CompoundBorder(new LineBorder(STATUS_AVAILABLE_BORDER, 1, true),
+                        new EmptyBorder(4, 10, 4, 10)));
             } else {
                 chipLabel.setBackground(STATUS_OUT_OF_STOCK_BG);
                 chipLabel.setForeground(STATUS_OUT_OF_STOCK_TEXT);
-                chipLabel.setBorder(new CompoundBorder(new LineBorder(STATUS_OUT_OF_STOCK_BORDER, 1, true), new EmptyBorder(4, 10, 4, 10)));
+                chipLabel.setBorder(new CompoundBorder(new LineBorder(STATUS_OUT_OF_STOCK_BORDER, 1, true),
+                        new EmptyBorder(4, 10, 4, 10)));
             }
             statusChip.add(chipLabel);
             fieldsPanel.add(statusChip, gbc);
@@ -217,33 +207,6 @@ public class UserModalDialog extends JDialog {
     }
 
     private JPanel createFooterPanel() {
-<<<<<<< HEAD
-        JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 16));
-        footer.setBackground(TABLE_HEADER_BG);
-        footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, BORDER_CARD));
-
-        JButton cancelButton = new JButton(userToEdit == null ? "Cancel" : "Close");
-        cancelButton.setFont(new Font("SansSerif", Font.PLAIN, 13));
-        cancelButton.setForeground(TEXT_SLATE);
-        cancelButton.setBackground(CARD_BACKGROUND);
-        cancelButton.setFocusPainted(false);
-        cancelButton.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(BORDER_FIELD, 1, true),
-                new EmptyBorder(8, 16, 8, 16)
-        ));
-        cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        cancelButton.addActionListener(e -> dispose());
-
-        saveButton = new JButton(userToEdit == null ? "Register User" : "Done");
-        saveButton.setFont(new Font("SansSerif", Font.BOLD, 13));
-        saveButton.setForeground(Color.WHITE);
-        saveButton.setBackground(BRAND_CRIMSON);
-        saveButton.setFocusPainted(false);
-        saveButton.setIcon(FontIcon.of(Material.CHECK, 16, Color.WHITE));
-        saveButton.setBorder(new EmptyBorder(9, 20, 9, 20));
-        saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-=======
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 14, 18));
         footer.setBackground(TABLE_HEADER_BG);
         footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, BORDER_CARD));
@@ -260,8 +223,7 @@ public class UserModalDialog extends JDialog {
         cancelButton.setIconTextGap(6);
         cancelButton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER_FIELD, 1, true),
-                new EmptyBorder(9, 20, 9, 20)
-        ));
+                new EmptyBorder(9, 20, 9, 20)));
         cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cancelButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -269,6 +231,7 @@ public class UserModalDialog extends JDialog {
                 cancelButton.setBackground(PAGE_BACKGROUND);
                 cancelButton.setForeground(TEXT_DARK);
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 cancelButton.setBackground(CARD_BACKGROUND);
@@ -302,6 +265,7 @@ public class UserModalDialog extends JDialog {
                     saveButton.setBackground(primaryHover);
                 }
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 if (saveButton.isEnabled()) {
@@ -309,7 +273,6 @@ public class UserModalDialog extends JDialog {
                 }
             }
         });
->>>>>>> 3223ef6f407c193dbc17b8d9fa3ebfd74b819eb4
         saveButton.addActionListener(e -> onSave());
 
         footer.add(cancelButton);
@@ -319,12 +282,13 @@ public class UserModalDialog extends JDialog {
     }
 
     private JComboBox<String> createRoleComboBox() {
-        JComboBox<String> combo = new JComboBox<>(new String[]{"STUDENT", "FACULTY"});
+        JComboBox<String> combo = new JComboBox<>(new String[] { "STUDENT", "FACULTY" });
         styleComboBox(combo);
 
         combo.setRenderer(new DefaultListCellRenderer() {
             @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+                    boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if ("STUDENT".equals(value)) {
                     setText("STUDENT  (Undergraduate / Postgraduate)");
@@ -429,8 +393,7 @@ public class UserModalDialog extends JDialog {
         field.putClientProperty("JTextField.placeholderText", placeholder);
         field.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER_FIELD, 1, true),
-                new EmptyBorder(8, 10, 8, 10)
-        ));
+                new EmptyBorder(8, 10, 8, 10)));
     }
 
     private void styleComboBox(JComboBox<?> combo) {
