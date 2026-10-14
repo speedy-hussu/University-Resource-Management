@@ -1,7 +1,7 @@
 package urms.ui.pages;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+
 import java.awt.Font;
 import java.awt.GridBagLayout;
 
@@ -11,7 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import urms.util.ColorConstants;
+
 
 import static urms.util.ColorConstants.*;
 

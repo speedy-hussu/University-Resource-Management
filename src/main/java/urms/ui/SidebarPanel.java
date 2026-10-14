@@ -88,12 +88,13 @@ public final class SidebarPanel {
 
         // Navigation Items
         ButtonGroup navigation = new ButtonGroup();
-        String[] menuItems = {"Dashboard", "Resources", "Allocations", "Categories", "Reports"};
+        String[] menuItems = {"Dashboard", "Resources", "Allocations", "Categories", "Users", "Reports"};
         Material[] menuIcons = {
                 Material.DASHBOARD,     // Modern 4-quadrant layout
                 Material.ALL_INBOX,      // Stacked storage/inventory boxes
                 Material.SWAP_HORIZ,     // Resource allocations & loan exchanges (left/right arrows)
                 Material.TOC,            // Categories
+                Material.PEOPLE,         // Campus users & borrowers directory
                 Material.INSERT_CHART    // Modern analytics and reports chart
         };
         for (int i = 0; i < menuItems.length; i++) {
