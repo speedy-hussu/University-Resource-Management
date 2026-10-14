@@ -10,9 +10,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-
-
 import static urms.util.ColorConstants.*;
 
 /**
@@ -35,8 +32,7 @@ public class CategoryPanel extends JPanel {
         header.setBackground(CARD_BACKGROUND);
         header.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_SUBTLE),
-                BorderFactory.createEmptyBorder(20, 28, 20, 28)
-        ));
+                BorderFactory.createEmptyBorder(20, 28, 20, 28)));
 
         JLabel titleLabel = new JLabel("Categories");
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
@@ -71,6 +67,7 @@ public class CategoryPanel extends JPanel {
      * Called when this tab becomes active, or when data needs refreshing.
      */
     public void refreshData() {
-        // TODO for teammate: Reload categories using CategoryDAO.selectAllActive() and calculate counts via loop
+        // TODO for teammate: Reload categories using CategoryDAO.selectAllActive() and
+        // calculate counts via loop
     }
 }

@@ -5,6 +5,7 @@ import org.kordamp.ikonli.swing.FontIcon;
 import urms.model.User;
 import urms.service.UserService;
 
+<<<<<<< HEAD
 
 import static urms.util.ColorConstants.*;
 
@@ -13,6 +14,38 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+=======
+import static urms.util.ColorConstants.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Window;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+>>>>>>> 3223ef6f407c193dbc17b8d9fa3ebfd74b819eb4
 
 /**
  * Modern modal dialog for registering campus borrowers (students and faculty)
@@ -184,6 +217,7 @@ public class UserModalDialog extends JDialog {
     }
 
     private JPanel createFooterPanel() {
+<<<<<<< HEAD
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 16));
         footer.setBackground(TABLE_HEADER_BG);
         footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, BORDER_CARD));
@@ -209,6 +243,73 @@ public class UserModalDialog extends JDialog {
         saveButton.setBorder(new EmptyBorder(9, 20, 9, 20));
         saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+=======
+        JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 14, 18));
+        footer.setBackground(TABLE_HEADER_BG);
+        footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, BORDER_CARD));
+
+        // --- Cancel / Close Button (ghost style with hover) ---
+        JButton cancelButton = new JButton(userToEdit == null ? "Cancel" : "Close");
+        cancelButton.setFont(new Font("SansSerif", Font.BOLD, 13));
+        cancelButton.setForeground(TEXT_SLATE);
+        cancelButton.setBackground(CARD_BACKGROUND);
+        cancelButton.setFocusPainted(false);
+        cancelButton.setContentAreaFilled(false);
+        cancelButton.setOpaque(true);
+        cancelButton.setIcon(FontIcon.of(Material.CLOSE, 15, TEXT_SLATE));
+        cancelButton.setIconTextGap(6);
+        cancelButton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BORDER_FIELD, 1, true),
+                new EmptyBorder(9, 20, 9, 20)
+        ));
+        cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cancelButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                cancelButton.setBackground(PAGE_BACKGROUND);
+                cancelButton.setForeground(TEXT_DARK);
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                cancelButton.setBackground(CARD_BACKGROUND);
+                cancelButton.setForeground(TEXT_SLATE);
+            }
+        });
+        cancelButton.addActionListener(e -> dispose());
+
+        // --- Primary Action Button (Crimson or Blue accent with hover) ---
+        boolean isViewMode = (userToEdit != null);
+        Color primaryBg = isViewMode ? BLUE_ACCENT : BRAND_CRIMSON;
+        Color primaryHover = isViewMode ? new Color(28, 75, 125) : BRAND_CRIMSON_HOVER;
+        Material primaryIcon = isViewMode ? Material.CHECK_CIRCLE : Material.PERSON_ADD;
+        String primaryText = isViewMode ? "Done" : "Register User";
+
+        saveButton = new JButton(primaryText);
+        saveButton.setFont(new Font("SansSerif", Font.BOLD, 13));
+        saveButton.setForeground(Color.WHITE);
+        saveButton.setBackground(primaryBg);
+        saveButton.setFocusPainted(false);
+        saveButton.setContentAreaFilled(false);
+        saveButton.setOpaque(true);
+        saveButton.setIcon(FontIcon.of(primaryIcon, 16, Color.WHITE));
+        saveButton.setIconTextGap(8);
+        saveButton.setBorder(new EmptyBorder(10, 24, 10, 24));
+        saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        saveButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (saveButton.isEnabled()) {
+                    saveButton.setBackground(primaryHover);
+                }
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (saveButton.isEnabled()) {
+                    saveButton.setBackground(primaryBg);
+                }
+            }
+        });
+>>>>>>> 3223ef6f407c193dbc17b8d9fa3ebfd74b819eb4
         saveButton.addActionListener(e -> onSave());
 
         footer.add(cancelButton);

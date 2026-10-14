@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -24,7 +25,7 @@ public class DatabaseConnection {
                 + "WHERE username = ? AND is_active = 1";
 
         try (Connection conn = getConnection();
-             PreparedStatement statement = conn.prepareStatement(sql)) {
+                PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, username);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -35,6 +36,69 @@ public class DatabaseConnection {
             }
         }
         return null;
+    }
+
+    /**
+     * Creates a unique session token upon successful login, valid for 7 days.
+     *
+     * @param username The operator's username
+     * @return The generated UUID session token
+     * @throws SQLException If database update fails
+     */
+    public static String createSession(String username) throws SQLException {
+        String token = UUID.randomUUID().toString();
+        String sql = "UPDATE Admin SET session_token = ?, token_expiry = datetime('now', '+7 days') WHERE username = ?";
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, token);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+        }
+        return token;
+    }
+
+    /**
+     * Validates if an active, unexpired session exists on startup.
+     * Also refreshes the token expiry (+7 days) upon successful session check.
+     *
+     * @return The operator's full name if a valid session exists, otherwise null.
+     */
+    public static String getActiveSessionUser() {
+        String sql = "SELECT full_name FROM Admin "
+                   + "WHERE session_token IS NOT NULL "
+                   + "  AND datetime(token_expiry) > datetime('now', 'localtime') "
+                   + "  AND is_active = 1 "
+                   + "LIMIT 1";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                String fullName = rs.getString("full_name");
+                // Rolling refresh: extend expiry by +7 days
+                try (Statement refreshStmt = conn.createStatement()) {
+                    refreshStmt.executeUpdate("UPDATE Admin SET token_expiry = datetime('now', '+7 days') WHERE session_token IS NOT NULL");
+                } catch (SQLException e) {
+                    System.err.println("Failed to refresh session expiry: " + e.getMessage());
+                }
+                return fullName;
+            }
+        } catch (SQLException e) {
+            System.err.println("Session check error: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Clears the active session token and expiry upon logout.
+     */
+    public static void clearSession() {
+        String sql = "UPDATE Admin SET session_token = NULL, token_expiry = NULL";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            System.err.println("Logout error: " + e.getMessage());
+        }
     }
 
     /**
@@ -51,17 +115,20 @@ public class DatabaseConnection {
 
     /**
      * Initializes database tables and demo seed data.
-     * Throws an unchecked RuntimeException on failure to prevent running against an invalid database.
+     * Throws an unchecked RuntimeException on failure to prevent running against an
+     * invalid database.
      */
     public static void initializeDatabase() {
         try (Connection conn = getConnection()) {
             System.out.println("Connecting to database: " + AppConfig.getDatabaseUrl());
 
-            // Check if existing tables use legacy schema (missing Admin table or Users with password_hash)
+            // Check if existing tables use legacy schema (missing Admin table or Users with
+            // password_hash)
             boolean needsMigration = false;
             try (Statement checkStmt = conn.createStatement()) {
                 boolean hasAdminTable = false;
-                try (ResultSet rs = checkStmt.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Admin';")) {
+                try (ResultSet rs = checkStmt
+                        .executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Admin';")) {
                     if (rs.next()) {
                         hasAdminTable = true;
                     }
@@ -77,7 +144,19 @@ public class DatabaseConnection {
                     }
                 }
 
-                if (!hasAdminTable || usersHasPasswordHash) {
+                boolean adminHasSessionToken = false;
+                if (hasAdminTable) {
+                    try (ResultSet rs = checkStmt.executeQuery("PRAGMA table_info(Admin);")) {
+                        while (rs.next()) {
+                            if ("session_token".equalsIgnoreCase(rs.getString("name"))) {
+                                adminHasSessionToken = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (!hasAdminTable || usersHasPasswordHash || !adminHasSessionToken) {
                     needsMigration = true;
                 }
             }

@@ -2,12 +2,27 @@ package urms.ui;
 
 import urms.dao.DatabaseConnection;
 
-
 import static urms.util.ColorConstants.*;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import java.sql.SQLException;
 
 /** Login screen for active URMS operators. */
@@ -55,10 +70,29 @@ public final class LoginWindow {
         form.add(passwordField);
 
         JButton signInButton = new JButton("Sign in");
+        signInButton.setFont(new Font("SansSerif", Font.BOLD, 13));
         signInButton.setForeground(Color.WHITE);
         signInButton.setBackground(BLUE_ACCENT);
         signInButton.setFocusPainted(false);
+        signInButton.setContentAreaFilled(false);
+        signInButton.setOpaque(true);
+        signInButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         signInButton.setBorder(BorderFactory.createEmptyBorder(11, 18, 11, 18));
+        signInButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (signInButton.isEnabled()) {
+                    signInButton.setBackground(new Color(28, 75, 125));
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (signInButton.isEnabled()) {
+                    signInButton.setBackground(BLUE_ACCENT);
+                }
+            }
+        });
 
         JLabel status = new JLabel(" ");
         status.setForeground(ERROR_RED);
@@ -90,6 +124,7 @@ public final class LoginWindow {
                     passwordField.setText("");
                     passwordField.requestFocusInWindow();
                 } else {
+                    DatabaseConnection.createSession(username);
                     frame.dispose();
                     DefaultWindow.showWindow(fullName);
                 }
