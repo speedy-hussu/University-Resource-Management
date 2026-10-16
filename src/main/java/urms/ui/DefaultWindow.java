@@ -41,7 +41,8 @@ public class DefaultWindow {
         ResourcePanel resourcePanel = new ResourcePanel();
         contentCards.add(resourcePanel, "Resources");
         contentCards.add(createSamplePage("Allocations", "Track resource assignments, bookings, and schedules"), "Allocations");
-        contentCards.add(new CategoryPanel(), "Categories");
+        CategoryPanel categoryPanel = new CategoryPanel();
+        contentCards.add(categoryPanel, "Categories");
         UserPanel userPanel = new UserPanel();
         contentCards.add(userPanel, "Users");
         contentCards.add(createSamplePage("Reports", "Generate usage summaries, audit logs, and analytics"), "Reports");
@@ -51,6 +52,8 @@ public class DefaultWindow {
             cardLayout.show(contentCards, cardName);
             if ("Resources".equals(cardName)) {
                 resourcePanel.loadData();
+            } else if ("Categories".equals(cardName)) {
+                categoryPanel.refreshData();
             } else if ("Users".equals(cardName)) {
                 userPanel.refreshData();
             }
