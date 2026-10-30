@@ -21,8 +21,7 @@ public class UserDAO {
                 rs.getString("enrollment_no"),
                 rs.getString("full_name"),
                 rs.getString("role"),
-                rs.getInt("is_active") == 1
-        );
+                rs.getInt("is_active") == 1);
     }
 
     /**
@@ -34,8 +33,8 @@ public class UserDAO {
                 + "WHERE is_active = 1 ORDER BY role ASC, full_name ASC;";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -52,7 +51,7 @@ public class UserDAO {
         String sql = "INSERT INTO Users (user_id, enrollment_no, full_name, role, is_active) VALUES (?, ?, ?, ?, 1);";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, userId);
             pstmt.setString(2, enrollmentNo.trim());
@@ -76,9 +75,30 @@ public class UserDAO {
                 + "WHERE LOWER(enrollment_no) = LOWER(?) AND is_active = 1 LIMIT 1;";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, enrollmentNo.trim());
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapRow(rs);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static User findById(String userId) throws SQLException {
+        if (userId == null || userId.trim().isEmpty()) {
+            return null;
+        }
+        String sql = "SELECT user_id, enrollment_no, full_name, role, is_active FROM Users "
+                + "WHERE LOWER(user_id) = LOWER(?) AND is_active = 1 LIMIT 1;";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, userId.trim());
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -101,7 +121,8 @@ public class UserDAO {
      */
     public static List<User> searchAndFilter(String query, String role) throws SQLException {
         List<User> list = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT user_id, enrollment_no, full_name, role, is_active FROM Users WHERE is_active = 1 ");
+        StringBuilder sql = new StringBuilder(
+                "SELECT user_id, enrollment_no, full_name, role, is_active FROM Users WHERE is_active = 1 ");
         List<Object> params = new ArrayList<>();
 
         if (query != null && !query.trim().isEmpty()) {
@@ -119,7 +140,7 @@ public class UserDAO {
         sql.append("ORDER BY role ASC, full_name ASC;");
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+                PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 
             for (int i = 0; i < params.size(); i++) {
                 pstmt.setObject(i + 1, params.get(i));

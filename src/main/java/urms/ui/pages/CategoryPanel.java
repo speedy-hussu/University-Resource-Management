@@ -68,6 +68,7 @@ public class CategoryPanel extends JPanel {
     // Empty state panel shown when no categories exist
     private JPanel emptyStatePanel;
     private JScrollPane tableScrollPane;
+    private JPanel tableCard;
 
     // Cache of currently displayed category summaries (with resource counts)
     private List<CategorySummary> currentSummaries = new ArrayList<>();
@@ -276,9 +277,9 @@ public class CategoryPanel extends JPanel {
      * context menu, double-click-to-edit, and an empty state overlay.
      */
     private JPanel createTableCard() {
-        JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(CARD_BACKGROUND);
-        card.setBorder(new LineBorder(BORDER_CARD, 1, true));
+        tableCard = new JPanel(new BorderLayout());
+        tableCard.setBackground(CARD_BACKGROUND);
+        tableCard.setBorder(new LineBorder(BORDER_CARD, 1, true));
 
         String[] columnNames = {
                 "S.No", "Category Name", "Description", "Resources", "Status"
@@ -385,8 +386,8 @@ public class CategoryPanel extends JPanel {
         // Empty state panel — shown when no categories exist
         emptyStatePanel = createEmptyState();
 
-        card.add(tableScrollPane, BorderLayout.CENTER);
-        return card;
+        tableCard.add(tableScrollPane, BorderLayout.CENTER);
+        return tableCard;
     }
 
     /**
@@ -537,16 +538,17 @@ public class CategoryPanel extends JPanel {
         deleteButton.setEnabled(false);
 
         // Toggle empty state vs table
-        JPanel card = (JPanel) tableScrollPane.getParent();
-        if (summaries.isEmpty()) {
-            card.remove(tableScrollPane);
-            card.add(emptyStatePanel, BorderLayout.CENTER);
-        } else {
-            card.remove(emptyStatePanel);
-            card.add(tableScrollPane, BorderLayout.CENTER);
+        if (tableCard != null) {
+            tableCard.remove(emptyStatePanel);
+            tableCard.remove(tableScrollPane);
+            if (summaries.isEmpty()) {
+                tableCard.add(emptyStatePanel, BorderLayout.CENTER);
+            } else {
+                tableCard.add(tableScrollPane, BorderLayout.CENTER);
+            }
+            tableCard.revalidate();
+            tableCard.repaint();
         }
-        card.revalidate();
-        card.repaint();
     }
 
     // ============================================================

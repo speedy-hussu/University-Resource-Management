@@ -32,8 +32,9 @@ URMS gives university operators a single place to track what the campus owns, wh
 | Area | Highlights |
 | :--- | :--- |
 | **Campus Directory** | Student and faculty registry with enrollment ID tracking, role badges (`STUDENT`, `FACULTY`), live search, and active/inactive filters |
+| **Categories** | Resource grouping with active resource count badges, status indicators (`IN USE`, `EMPTY`), deletion guards for assigned items, and empty state handling |
 | **Resource Inventory** | Lifecycle tracking for equipment, labs, and consumables with category filtering, stock availability indicators, and modal editing |
-| **Allocations** | Checkout, loan, and return records linking resources to borrowers, with due dates and status |
+| **Allocations** | Checkout, loan, and return records linking resources to borrowers with atomic inventory syncing, date element pickers with interactive calendar popups, quick due-date presets, overdue tracking, and status badges (`ACTIVE`, `RETURNED`, `OVERDUE`) |
 | **Navigation** | Central `CardLayout` shell with isolated page panels under `urms.ui.pages` |
 | **Security** | Operator login with salted **BCrypt** hashing and persistent sessions |
 | **Modern UI** | **FlatLaf** with HiDPI vector scaling, hover states, and Navrachana crimson branding (`#B32025`); offline **Ikonli** Material icons |
@@ -129,16 +130,19 @@ University-Resource-Management/
     ├── java/urms/
     │   ├── Main.java              # Entry point: theme, DB bootstrap, window launch
     │   ├── model/                 # Domain entities and DTOs
+    │   │   ├── Allocation.java
     │   │   ├── Category.java
     │   │   ├── CategorySummary.java
     │   │   ├── Resource.java
     │   │   └── User.java
     │   ├── dao/                   # Data access (pure SQL)
     │   │   ├── DatabaseConnection.java   # Connection, schema runner, auth/session
+    │   │   ├── AllocationDAO.java
     │   │   ├── CategoryDAO.java
     │   │   ├── ResourceDAO.java
     │   │   └── UserDAO.java
     │   ├── service/               # Business logic and validation
+    │   │   ├── AllocationService.java
     │   │   ├── CategoryService.java
     │   │   ├── ResourceService.java
     │   │   └── UserService.java
@@ -147,9 +151,12 @@ University-Resource-Management/
     │   │   ├── LoginWindow.java
     │   │   ├── SidebarPanel.java
     │   │   ├── dialogs/
+    │   │   │   ├── AllocationModalDialog.java
+    │   │   │   ├── CategoryModalDialog.java
     │   │   │   ├── ResourceModalDialog.java
     │   │   │   └── UserModalDialog.java
     │   │   └── pages/
+    │   │       ├── AllocationPanel.java
     │   │       ├── CategoryPanel.java
     │   │       ├── ResourcePanel.java
     │   │       └── UserPanel.java
@@ -182,6 +189,12 @@ erDiagram
 | **Categories** | Resource groupings | `category_id`, `category_name`, `description`, `is_active` |
 | **Resources** | Equipment, labs, assets | `resource_id`, `resource_name`, `category_id` (FK), `resource_type`, `location`, `total_quantity`, `available_quantity`, `is_active` |
 | **Allocations** | Checkouts, loans, returns | `allocation_id`, `resource_id` (FK), `user_id` (FK), `quantity`, `issue_date`, `due_date`, `return_date`, `status`, `issued_by`, `remarks` |
+
+### Transaction & Inventory Integrity
+
+- **Checkout (`AllocationDAO.insertAllocation`):** Runs inside an atomic SQLite transaction (`conn.setAutoCommit(false)`). Verifies stock sufficiency, decrements `available_quantity` in `Resources`, and logs the allocation with status `ACTIVE`.
+- **Return (`AllocationDAO.returnAllocation`):** Atomic transaction marks the loan as `RETURNED`, sets the `return_date` timestamp, and increments `available_quantity` back into inventory.
+- **Category Guard:** Categories with linked active resources are protected against deletion via foreign-key / count checks in `CategoryService`.
 
 ## UI & Design System
 

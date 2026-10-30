@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import urms.ui.pages.AllocationPanel;
 import urms.ui.pages.CategoryPanel;
 import urms.ui.pages.ResourcePanel;
 import urms.ui.pages.UserPanel;
@@ -40,7 +41,8 @@ public class DefaultWindow {
         contentCards.add(createSamplePage("Dashboard", "Overview of campus assets, occupancy, and pending requests"), "Dashboard");
         ResourcePanel resourcePanel = new ResourcePanel();
         contentCards.add(resourcePanel, "Resources");
-        contentCards.add(createSamplePage("Allocations", "Track resource assignments, bookings, and schedules"), "Allocations");
+        AllocationPanel allocationPanel = new AllocationPanel();
+        contentCards.add(allocationPanel, "Allocations");
         CategoryPanel categoryPanel = new CategoryPanel();
         contentCards.add(categoryPanel, "Categories");
         UserPanel userPanel = new UserPanel();
@@ -52,6 +54,8 @@ public class DefaultWindow {
             cardLayout.show(contentCards, cardName);
             if ("Resources".equals(cardName)) {
                 resourcePanel.loadData();
+            } else if ("Allocations".equals(cardName)) {
+                allocationPanel.refreshData();
             } else if ("Categories".equals(cardName)) {
                 categoryPanel.refreshData();
             } else if ("Users".equals(cardName)) {
