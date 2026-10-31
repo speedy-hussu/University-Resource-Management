@@ -6,6 +6,7 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -17,6 +18,7 @@ import javax.swing.JPanel;
 
 import urms.ui.pages.AllocationPanel;
 import urms.ui.pages.CategoryPanel;
+import urms.ui.pages.DashboardPanel;
 import urms.ui.pages.ResourcePanel;
 import urms.ui.pages.UserPanel;
 
@@ -38,21 +40,39 @@ public class DefaultWindow {
         JPanel contentCards = new JPanel(cardLayout);
 
         // Register cards corresponding to sidebar items
-        contentCards.add(createSamplePage("Dashboard", "Overview of campus assets, occupancy, and pending requests"), "Dashboard");
         ResourcePanel resourcePanel = new ResourcePanel();
-        contentCards.add(resourcePanel, "Resources");
         AllocationPanel allocationPanel = new AllocationPanel();
-        contentCards.add(allocationPanel, "Allocations");
         CategoryPanel categoryPanel = new CategoryPanel();
-        contentCards.add(categoryPanel, "Categories");
         UserPanel userPanel = new UserPanel();
+
+        Consumer<String> navigateTo = cardName -> {
+            cardLayout.show(contentCards, cardName);
+            if ("Dashboard".equals(cardName)) {
+                // will be handled by dashboardPanel
+            } else if ("Resources".equals(cardName)) {
+                resourcePanel.loadData();
+            } else if ("Allocations".equals(cardName)) {
+                allocationPanel.refreshData();
+            } else if ("Categories".equals(cardName)) {
+                categoryPanel.refreshData();
+            } else if ("Users".equals(cardName)) {
+                userPanel.refreshData();
+            }
+        };
+
+        DashboardPanel dashboardPanel = new DashboardPanel(navigateTo);
+        contentCards.add(dashboardPanel, "Dashboard");
+        contentCards.add(resourcePanel, "Resources");
+        contentCards.add(allocationPanel, "Allocations");
+        contentCards.add(categoryPanel, "Categories");
         contentCards.add(userPanel, "Users");
-        contentCards.add(createSamplePage("Reports", "Generate usage summaries, audit logs, and analytics"), "Reports");
 
         // Hook up sidebar selection callback to show the matching card
         JComponent sidebar = SidebarPanel.createSidebar(cardName -> {
             cardLayout.show(contentCards, cardName);
-            if ("Resources".equals(cardName)) {
+            if ("Dashboard".equals(cardName)) {
+                dashboardPanel.refreshData();
+            } else if ("Resources".equals(cardName)) {
                 resourcePanel.loadData();
             } else if ("Allocations".equals(cardName)) {
                 allocationPanel.refreshData();

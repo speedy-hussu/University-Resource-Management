@@ -83,6 +83,28 @@ public class AllocationDAO {
     }
 
     /**
+     * Retrieves the most recent allocation records ordered chronologically (newest first).
+     *
+     * @param limit Maximum number of records to return
+     */
+    public static List<Allocation> selectRecent(int limit) throws SQLException {
+        List<Allocation> list = new ArrayList<>();
+        String sql = BASE_SELECT + "ORDER BY a.issue_date DESC, a.rowid DESC LIMIT ?;";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, limit);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapRow(rs));
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
      * Finds an allocation record by its UUID.
      */
     public static Allocation findById(String allocationId) throws SQLException {

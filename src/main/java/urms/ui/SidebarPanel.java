@@ -47,7 +47,16 @@ public final class SidebarPanel {
     private static final Font FONT_REGULAR = new Font("SansSerif", Font.PLAIN, 14);
     private static final Font FONT_BOLD = new Font("SansSerif", Font.BOLD, 14);
 
+    private static final java.util.Map<String, JToggleButton> NAV_BUTTONS = new java.util.HashMap<>();
+
     private SidebarPanel() {
+    }
+
+    public static void selectTab(String name) {
+        JToggleButton btn = NAV_BUTTONS.get(name);
+        if (btn != null && !btn.isSelected()) {
+            btn.setSelected(true);
+        }
     }
 
     public static JComponent createSidebar() {
@@ -55,6 +64,7 @@ public final class SidebarPanel {
     }
 
     public static JComponent createSidebar(Consumer<String> onNavigate) {
+        NAV_BUTTONS.clear();
         JPanel sidebar = new JPanel(new BorderLayout());
         sidebar.setPreferredSize(new Dimension(SIDEBAR_WIDTH, 0));
         sidebar.setBackground(SIDEBAR_BG);
@@ -92,14 +102,13 @@ public final class SidebarPanel {
 
         // Navigation Items
         ButtonGroup navigation = new ButtonGroup();
-        String[] menuItems = {"Dashboard", "Resources", "Allocations", "Categories", "Users", "Reports"};
+        String[] menuItems = {"Dashboard", "Resources", "Allocations", "Categories", "Users"};
         Material[] menuIcons = {
                 Material.DASHBOARD,     // Modern 4-quadrant layout
                 Material.ALL_INBOX,      // Stacked storage/inventory boxes
                 Material.SWAP_HORIZ,     // Resource allocations & loan exchanges (left/right arrows)
                 Material.TOC,            // Categories
-                Material.PEOPLE,         // Campus users & borrowers directory
-                Material.INSERT_CHART    // Modern analytics and reports chart
+                Material.PEOPLE          // Campus users & borrowers directory
         };
         for (int i = 0; i < menuItems.length; i++) {
             top.add(createNavigationItem(menuItems[i], menuIcons[i], i == 0, navigation, onNavigate));
@@ -206,6 +215,7 @@ public final class SidebarPanel {
             }
         });
 
+        NAV_BUTTONS.put(text, item);
         navigation.add(item);
         return item;
     }
